@@ -271,7 +271,7 @@ public class Game extends Observable {
                    
                     Bulletin.getBoard().appendMsg(MessageType.GameOver, "Game Over");
                     computeScore();
-                    //todo - some reason the score at this point is coming as zero always - need to check
+                    
                     for (Player player : players)
                     {
                             Bulletin.getBoard().appendMsg(MessageType.Normal, "Player " + player.getIndex() 
