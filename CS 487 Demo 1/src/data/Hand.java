@@ -7,6 +7,7 @@ import java.util.Iterator;
 public class Hand {
         
         private ArrayList<Piece> aHand = new ArrayList<Piece>();
+        private Piece lastPiecePlaced;
 
         /**
          * Creates an instance of a Hand.
@@ -15,6 +16,7 @@ public class Hand {
         public Hand() 
         {
                 reset();
+                lastPiecePlaced=null;
                 addAllNewPieces();
         }
         
@@ -34,10 +36,15 @@ public class Hand {
                 {
                         if (piece.getType() == aHand.get(x).getType())
                         {
+                        		lastPiecePlaced = piece;
                                 aHand.remove(x);
                                 break;
                         }       
                 }
+        }
+        public Piece getLastPiecePlaced()
+        {
+        	return lastPiecePlaced;
         }
         
         public Iterator<Piece> getIterator()

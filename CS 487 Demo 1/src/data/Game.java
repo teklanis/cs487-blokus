@@ -1,7 +1,9 @@
 package data;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Observable;
 
 public class Game extends Observable {
@@ -24,7 +26,10 @@ public class Game extends Observable {
     
     private ArrayList<Player> players;
     
-    private int curPlayerIdx;
+    private HashMap<Player,Integer> playerScores;
+    
+    
+	private int curPlayerIdx;
     
     private boolean isRunning;
     
@@ -43,9 +48,11 @@ public class Game extends Observable {
     {
             curPlayerIdx = idx;
     }
+    public synchronized HashMap<Player, Integer> getPlayerScores() {
+		return playerScores;
+	}
     
-    
-    /**
+	/**
      * Processes player's move.
      * 
      * @param move player's move
@@ -73,6 +80,7 @@ public class Game extends Observable {
     public Game() {
             board = new Board();
             players = new ArrayList<Player>();
+            playerScores = new HashMap<Player, Integer>();
     }
     
     public synchronized boolean isRunning() {
@@ -165,7 +173,7 @@ public class Game extends Observable {
                     
                     if (h.piecesLeft() == 0)
                     {
-                            p.addScore(20);
+                    	playerscore= p.addScore(20);
                     }
                     else
                     {
@@ -176,10 +184,17 @@ public class Game extends Observable {
                             	
                             	playerscore = p.addScore(-1 * i.next().getNumBlocks());
                                    
-                                //todo - to find the last piece placed by a player      
+                                
                                     
-                            }                       
+                            }    
+                           playerscore = 20 +( playerscore);
                     }
+                  
+                	if(h.getLastPiecePlaced().getType() == Piece.Type.One)
+                	{
+                		playerscore += 5;
+                	}
+                	playerScores.put(p, playerscore);
                     System.out.println("compute score playesss score....."+playerscore);
             }
     }
@@ -271,7 +286,7 @@ public class Game extends Observable {
                    
                     Bulletin.getBoard().appendMsg(MessageType.GameOver, "Game Over");
                     computeScore();
-                    
+                    //todo - some reason the score at this point is coming as zero always - need to check
                     for (Player player : players)
                     {
                             Bulletin.getBoard().appendMsg(MessageType.Normal, "Player " + player.getIndex() 
