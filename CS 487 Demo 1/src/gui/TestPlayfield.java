@@ -65,7 +65,7 @@ public class TestPlayfield extends JPanel
             
             boardHeight = this.getHeight();
             boardWidth = this.getWidth();
-            int hieghtFactor = boardHeight/20;
+            int heightFactor = boardHeight/20;
             int widthFactor = boardWidth/20;
             
             //System.out.println("game " + theGame);
@@ -79,7 +79,7 @@ public class TestPlayfield extends JPanel
                         g2d.setPaint(getPlayerColor(currentBoard.getBlock(i, j)));
                                 
                         Rectangle2D.Double block = new Rectangle2D.Double( 
-                                                j*widthFactor, (i)*hieghtFactor, widthFactor, hieghtFactor);
+                                                j*widthFactor, (i)*heightFactor, widthFactor, heightFactor);
                         g2d.fill(block);
                         g2d.setPaint(Color.BLACK);
                                 
