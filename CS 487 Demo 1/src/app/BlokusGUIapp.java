@@ -2,12 +2,16 @@ package app;
 
 import gui.TestPlayfield;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Set;
 
-//import data.AILikesMiddle;
+
 import data.AIRandom;
-//import data.AImidBlocksCorners;
+
 import data.Board;
 import data.Bulletin;
 import data.ComputerPlayer;
@@ -19,9 +23,11 @@ public class BlokusGUIapp implements Observer {
 
         /** Stores reference to Game */
         private Game game;
-       
+
         private TestPlayfield playfield;
-       
+
+
+
         private void printSeparatorLine() {
                 for (int i=0; i < Board.X_DIMENSION; i++) {
                         System.out.print(" -");
@@ -31,12 +37,12 @@ public class BlokusGUIapp implements Observer {
 
         private void printBoardLine(Board board, int row) {
                 for (int i=0; i < Board.X_DIMENSION; i++) {
-                       
+
                         System.out.print("|" + board.getBlock(row, i));
                 }
                 System.out.println("|");
         }
-       
+
         private void printBoard(Board board) {
                 printSeparatorLine();
                 for (int row=0; row < Board.Y_DIMENSION; row++) {
@@ -44,14 +50,14 @@ public class BlokusGUIapp implements Observer {
                 }
                 printSeparatorLine();
         }
-       
+
         /**
          * Creates a new Blokus game and sets up the Game.
          */
         public BlokusGUIapp() {
-               
+
                 game = new Game();
-               
+
                 // add self as observers
                 Bulletin.getBoard().addObserver(this);
                 game.addObserver(this);
@@ -68,30 +74,30 @@ public class BlokusGUIapp implements Observer {
                 Player player1 = new ComputerPlayer(1, new AIRandom());
                 ( player1).setAutoProgress(false);
                 game.addPlayer(player1);
-               
+
                 Player player2 = new ComputerPlayer(2, new AIRandom());
                 ( player2).setAutoProgress(false);
                 game.addPlayer(player2);
-               
+
                 Player player3 = new ComputerPlayer(3, new AIRandom());
                 ( player3).setAutoProgress(false);
                 game.addPlayer(player3);
-               
+
                 Player player4 = new ComputerPlayer(4, new AIRandom());
                 ( player4).setAutoProgress(false);
                 game.addPlayer(player4);
 
-               
+
                 game.start();
-             
+
         }
 
-        //@Override
+        
         public synchronized void update(Observable obj, Object arg) {
                 if (obj instanceof Bulletin) {
                         Bulletin b = (Bulletin) obj;
                         System.out.println(b.getLastMsg());
-                        
+
                 }
                 if (obj instanceof Game)
                 {
@@ -100,11 +106,12 @@ public class BlokusGUIapp implements Observer {
                         if(game.isRunning() == false)
                         {
                         	System.out.println("Game ended");
+
                         	playfield.closeGame();
                         }
                 }
         }
-       
+
         /**
          * Program execution entry point.
          *

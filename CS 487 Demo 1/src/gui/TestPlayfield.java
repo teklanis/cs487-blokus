@@ -7,17 +7,24 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.geom.Rectangle2D;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane.MoveAction;
 
 import data.Board;
 import data.Game;
 import data.Move;
+import data.Player;
 
 public class TestPlayfield extends JPanel
 {
@@ -38,7 +45,7 @@ public class TestPlayfield extends JPanel
         
         private JButton moveButton;
         private boolean endGame;
-        
+        private HashMap<Player, Integer> scoresMap;
         public TestPlayfield (Game theGame)
         {
                 setPreferredSize(new Dimension(boardWidth, boardHeight));
@@ -65,7 +72,7 @@ public class TestPlayfield extends JPanel
             
             boardHeight = this.getHeight();
             boardWidth = this.getWidth();
-            int heightFactor = boardHeight/20;
+            int hieghtFactor = boardHeight/20;
             int widthFactor = boardWidth/20;
             
             //System.out.println("game " + theGame);
@@ -79,7 +86,7 @@ public class TestPlayfield extends JPanel
                         g2d.setPaint(getPlayerColor(currentBoard.getBlock(i, j)));
                                 
                         Rectangle2D.Double block = new Rectangle2D.Double( 
-                                                j*widthFactor, (i)*heightFactor, widthFactor, heightFactor);
+                                                j*widthFactor, (i)*hieghtFactor, widthFactor, hieghtFactor);
                         g2d.fill(block);
                         g2d.setPaint(Color.BLACK);
                                 
@@ -93,11 +100,25 @@ public class TestPlayfield extends JPanel
 		public  void closeGame()
         {
         	blokusFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        	JOptionPane.showMessageDialog(blokusFrame,
-            "Game is over.");
-        	endGame = true;
+        	String scores = "Players Scores are: " + "\n";
         	
-        
+        	int playerindex=0;
+        	endGame = true;
+        	scoresMap=theGame.getPlayerScores();
+        	Set set = scoresMap.entrySet();
+        	Iterator iter = set.iterator();
+        	while(iter.hasNext())
+        	{
+        		playerindex++;
+        		Map.Entry entry = (Map.Entry) iter.next();
+        		System.out.println(entry.getKey() + " : " + entry.getValue());
+        		scores += "player "+ new Integer(playerindex)+ " = " +entry.getValue().toString() + "\n ";
+        	}
+        	JOptionPane.showMessageDialog(blokusFrame,	"Game is over!!"+"\n"+ "\n"+scores);
+        	
+        	blokusFrame.dispose();
+        	//blokusFrame.setEnabled(false);
+//         	blokusFrame.getDefaultCloseOperation();
         	
         }
         
@@ -145,7 +166,10 @@ public class TestPlayfield extends JPanel
                         super(NAME);
                         this.putValue(MNEMONIC_KEY, 76);
                 }
-                        
+                public void disableButton()
+                {
+                	setEnabled(false);
+                }
                 /**
                  * When the action happens,trigger the next AI to move.
                  * 
@@ -154,14 +178,21 @@ public class TestPlayfield extends JPanel
                 public void actionPerformed(ActionEvent action)
                 {
                 	if(endGame ==true)
+                	{
                     	setEnabled(false);
-                    Move move = theGame.getCurrentPlayer().getNextMove(theGame.getBoard());
-                    theGame.getCurrentPlayer().putNextMove(move);
+                    	
+                	}
+                	else
+                	{
+	                    Move move = theGame.getCurrentPlayer().getNextMove(theGame.getBoard());
+	                    theGame.getCurrentPlayer().putNextMove(move);
+                	}
                         
                         
                 }
                
         }
+        
         
 
 }
